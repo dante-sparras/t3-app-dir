@@ -1,5 +1,5 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { type NextApiRequest } from "next/types";
+import { type NextRequest } from "next/server";
 
 import { env } from "~/env.mjs";
 import { apiRouter } from "~/server/api/api-router";
@@ -8,12 +8,12 @@ import { createTRPCContext } from "~/server/api/trpc";
 /**
  * This is the server RPC handler for trpc.
  */
-function handler(request: NextApiRequest) {
+function handler(request: NextRequest) {
   // we currently have to use fetchRequestHandler beacuse
   // of poor support from trpc for Next.js 13 with app directory
   return fetchRequestHandler({
     endpoint: "/api/trpc",
-    req: request as unknown as Request,
+    req: request,
     router: apiRouter,
     createContext: createTRPCContext,
     onError:
